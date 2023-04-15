@@ -19,14 +19,13 @@
 <body>
   <div class="row">
     <div id="description" class="alert alert-primary">
-      [1/?] <br>
-      The door is locked. You do not have the key, but you realize that you can just break the door by
-      hitting it <b>200</b> times. <br>
-      You can hit the door once by calling the function <b><i>hit()</i></b> directly.
+      [2/?] <br>
+      You have to reach to the other side. Floor with red stripes are dangerous and you shouldn't walk on them. <br>
+      You can move by using <b><i>move()</i></b> in direction "Left", "Right", "Up" or "Down".
       <br>
       <br>
       Mission: <br>
-      Break the door.
+      Reach to the other side.
     </div>
   </div>
 
@@ -44,11 +43,11 @@
       </div>
 
       <div id="alertSuccess" class="alert alert-success" style="display: none;">
-        <strong>Success!</strong> You break the door!
+        <strong>Success!</strong> You reach to the other side!
       </div>
 
       <div id="alertFail" class="alert alert-danger" style="display: none;">
-        <strong>You didn't break the door.</strong> Try again!
+        <strong>You didn't reach to the other side.</strong> Try again!
       </div>
       
       <div id="alertProblem" class="alert alert-warning" style="display: none;">
@@ -59,9 +58,7 @@
 
   <script src="ide/ide.js"></script>
   <script src="gamescreen/sprite.js"></script>
-  <script src="gamescreen/door.js"></script>
   <script src="gamescreen/player.js"></script>
-  <script src="gamescreen/smoke.js"></script>
   <script src="gamescreen/process.js"></script>
 </body>
 </html>
