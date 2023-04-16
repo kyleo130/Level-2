@@ -2,10 +2,16 @@ const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
 
 const player = Player(context, 176, 192);
+player.draw();
 
+let attempt = 0;
 let result = [];
 let submitted = false;
 let finished = false;
+
+function addAttempt() {
+  attempt += 1;
+}
 
 function setResult(val) {
   result = val;
@@ -47,7 +53,10 @@ function handleOutOfBound(x, y) {
   if (x < 16 || x > 624 || y < 32 || y > 416) {
     endAnimation();
     setTimeout(sendFail, 1000);
+    return true;
   }
+
+  return false;
 }
 
 function doFrame(now) {
@@ -67,6 +76,8 @@ function doFrame(now) {
       } else {
         setTimeout(sendFail, 1000);
       }
+
+      return;
     }
 
     if (submitted && !finished) {
@@ -74,16 +85,24 @@ function doFrame(now) {
       let nowPos = player.getXY();
 
       if (nowPos.x > targetPos[0] * 32) {
-        handleOutOfBound(nowPos.x - 1, nowPos.y);
+        if (handleOutOfBound(nowPos.x - 1, nowPos.y)) {
+          return;
+        }
         player.setXY(nowPos.x - 1, nowPos.y);
       } else if (nowPos.x < targetPos[0] * 32) {
-        handleOutOfBound(nowPos.x + 1, nowPos.y);
+        if (handleOutOfBound(nowPos.x + 1, nowPos.y)) {
+          return;
+        }
         player.setXY(nowPos.x + 1, nowPos.y);
       } else if (nowPos.y > targetPos[1] * 32) {
-        handleOutOfBound(nowPos.x, nowPos.y - 1);
+        if(handleOutOfBound(nowPos.x, nowPos.y - 1)) {
+          return;
+        }
         player.setXY(nowPos.x, nowPos.y - 1);
       } else if (nowPos.y < targetPos[1] * 32) {
-        handleOutOfBound(nowPos.x, nowPos.y + 1);
+        if(handleOutOfBound(nowPos.x, nowPos.y + 1)) {
+          return;
+        }
         player.setXY(nowPos.x, nowPos.y + 1);
       } else {
         result.shift();
