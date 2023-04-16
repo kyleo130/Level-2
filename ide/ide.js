@@ -91,9 +91,11 @@ coordinates;
 submitButton.addEventListener('click', function() {
     let code = editor.getValue();
     try {
-        let result = eval(skeletonBefore + code + skeletonAfter);
-        console.log(result);
+        setResult(eval(skeletonBefore + code + skeletonAfter));
         setSubmitted(true);
+        document.getElementById("alertSuccess").style.display = "none";
+        document.getElementById("alertFail").style.display = "none";
+        document.getElementById("alertProblem").style.display = "none";
     } catch (err) {
         console.error(err);
         document.getElementById("alertSuccess").style.display = "none";

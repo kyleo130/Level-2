@@ -24,6 +24,7 @@ const Player = function(ctx, x, y) {
         stop: stop,
         draw: sprite.draw,
         update: sprite.update,
-        setXY: sprite.setXY
+        setXY: sprite.setXY,
+        getXY: sprite.getXY
     };
 };
