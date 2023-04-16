@@ -1,6 +1,24 @@
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
 
+const bitmap = [
+[9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+[0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 9, 9, 0],
+[0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+[9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
+]
+
 const player = Player(context, 176, 192);
 player.draw();
 
@@ -49,10 +67,28 @@ function endAnimation() {
   result = [];
 }
 
+function dieAnimation() {
+  setFinished(true);
+  player.die();
+  result = [];
+}
+
 function handleOutOfBound(x, y) {
   if (x < 16 || x > 624 || y < 32 || y > 416) {
     endAnimation();
     setTimeout(sendFail, 1000);
+    return true;
+  }
+
+  return false;
+}
+
+function handleStepOnRed(x, y) {
+  let coorX = Math.floor(x/32);
+  let coorY = Math.floor((y/32)+0.5);
+  if (bitmap[coorY][coorX] == 1) {
+    dieAnimation();
+    setTimeout(sendFail, 500);
     return true;
   }
 
@@ -77,32 +113,26 @@ function doFrame(now) {
         setTimeout(sendFail, 1000);
       }
 
-      return;
+      // return;
+    }
+
+    let nowPos = player.getXY();
+    handleOutOfBound(nowPos.x, nowPos.y);
+
+    if (submitted) {
+      handleStepOnRed(nowPos.x, nowPos.y);
     }
 
     if (submitted && !finished) {
       let targetPos = result[0];
-      let nowPos = player.getXY();
 
       if (nowPos.x > targetPos[0] * 32) {
-        if (handleOutOfBound(nowPos.x - 1, nowPos.y)) {
-          return;
-        }
         player.setXY(nowPos.x - 1, nowPos.y);
       } else if (nowPos.x < targetPos[0] * 32) {
-        if (handleOutOfBound(nowPos.x + 1, nowPos.y)) {
-          return;
-        }
         player.setXY(nowPos.x + 1, nowPos.y);
       } else if (nowPos.y > targetPos[1] * 32) {
-        if(handleOutOfBound(nowPos.x, nowPos.y - 1)) {
-          return;
-        }
         player.setXY(nowPos.x, nowPos.y - 1);
       } else if (nowPos.y < targetPos[1] * 32) {
-        if(handleOutOfBound(nowPos.x, nowPos.y + 1)) {
-          return;
-        }
         player.setXY(nowPos.x, nowPos.y + 1);
       } else {
         result.shift();

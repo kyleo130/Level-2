@@ -92,10 +92,12 @@ submitButton.addEventListener('click', function() {
     let code = editor.getValue();
     try {
         setResult(eval(skeletonBefore + code + skeletonAfter));
+        /*
         if (attempt > 0) {
             requestAnimationFrame(doFrame);
         }
         addAttempt();
+        */
         setSubmitted(true);
         document.getElementById("alertSuccess").style.display = "none";
         document.getElementById("alertFail").style.display = "none";
